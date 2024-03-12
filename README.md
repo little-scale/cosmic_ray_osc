@@ -1,5 +1,5 @@
 # cosmic_ray_osc
-Cosmic Ray Detector OSC Output for ESP32-S3 using a device from https://cosmicray.com.au/ built by Robert 
+Cosmic Ray Detector OSC Output for ESP32-S3 using a device from https://cosmicray.com.au/ built by Robert Hart
 
 Change network details and target IP address for the OSC version
 
