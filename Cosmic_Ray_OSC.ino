@@ -12,13 +12,13 @@ const int led_pin = 2;
 const int cosmic_ray = 1;
 int strobe_rate = 250 / number_of_leds;  // set total time for strobe
 
-char ssid[] = "----";  // your network SSID (name)
-char pass[] = "----";
+char ssid[] = "---";  // your network SSID (name)
+char pass[] = "---";
 OSCErrorCode error;
 unsigned int ledState = LOW;
 
 WiFiUDP Udp;
-const IPAddress outIp(192, 168, 0, 2); // target IP address
+const IPAddress outIp(192, 168, 0, 6);  // target IP address
 const unsigned int outPort = 9999;
 const unsigned int localPort = 8888;
 
@@ -29,6 +29,10 @@ byte r = 255;
 byte g = 128;
 byte b = 64;
 
+int ping = 0;
+
+
+
 
 
 
@@ -38,6 +42,8 @@ Adafruit_NeoPixel leds = Adafruit_NeoPixel(number_of_leds, led_pin);
 void setup() {
   Serial.begin(57600);
   pinMode(cosmic_ray, INPUT);
+
+  attachInterrupt(cosmic_ray, cosmic_ray_isr, RISING);
 
   // Setup LEDs
   leds.begin();
@@ -69,16 +75,21 @@ void setup() {
 }
 
 void loop() {
-  if (digitalRead(cosmic_ray) == HIGH) {
+  getosc();
+
+  if (ping == 1) {
     if (strobing == 1) {
       strobe();
     }
 
     sendOSC();
     Serial.println("ping");
+    ping = 0; 
   }
+}
 
-  getosc();
+void cosmic_ray_isr() {
+  ping = 1;
 }
 
 void strobe() {
